@@ -1,0 +1,803 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pakistan AI Hub — Tuba Akbar</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --navy:#0a1628;--navy2:#0f1f3d;--navy3:#162b52;--navy4:#1d3767;
+  --blue:#2563eb;--blue2:#3b82f6;--blue3:#60a5fa;--blue4:#93c5fd;
+  --sky:#0ea5e9;--cyan:#06b6d4;--gold:#f59e0b;--gold2:#fbbf24;
+  --green:#10b981;--red:#ef4444;--white:#f8faff;--white2:#e2e8f8;
+  --muted:#8fa6cc;--muted2:#5a7aaa;--border:#1e3560;--border2:#2a4878;
+  --card:#0d1e3c;--font:'Space Grotesk',sans-serif;--mono:'JetBrains Mono',monospace;
+}
+html{scroll-behavior:smooth}
+body{background:var(--navy);color:var(--white);font-family:var(--font);overflow-x:hidden}
+nav{display:flex;justify-content:space-between;align-items:center;padding:1rem 4rem;background:rgba(10,22,40,0.97);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:999;backdrop-filter:blur(12px)}
+.logo{display:flex;align-items:center;gap:0.7rem}
+.logo-icon{width:36px;height:36px;background:linear-gradient(135deg,var(--blue),var(--cyan));border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:1.1rem}
+.logo-text{font-size:1.1rem;font-weight:700;letter-spacing:0.02em}
+.logo-text span{color:var(--blue3)}
+.nav-links{display:flex;gap:2rem;list-style:none}
+.nav-links a{text-decoration:none;font-size:0.85rem;font-weight:500;color:var(--muted);transition:color .2s;letter-spacing:0.03em}
+.nav-links a:hover{color:var(--white)}
+.nav-cta{background:var(--blue);color:#fff;border:none;padding:0.55rem 1.4rem;border-radius:6px;font-size:0.82rem;font-weight:600;cursor:pointer;font-family:var(--font);letter-spacing:0.03em;transition:background .2s}
+.nav-cta:hover{background:var(--blue2)}
+.hero{min-height:90vh;display:grid;grid-template-columns:1fr 1fr;align-items:center;padding:4rem;gap:4rem;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;top:-200px;right:-200px;width:700px;height:700px;background:radial-gradient(circle,rgba(37,99,235,0.12) 0%,transparent 70%);pointer-events:none}
+.hero::after{content:'';position:absolute;bottom:-100px;left:-100px;width:500px;height:500px;background:radial-gradient(circle,rgba(6,182,212,0.08) 0%,transparent 70%);pointer-events:none}
+.hero-badge{display:inline-flex;align-items:center;gap:0.5rem;background:rgba(37,99,235,0.15);border:1px solid rgba(96,165,250,0.3);border-radius:20px;padding:0.35rem 1rem;font-size:0.72rem;font-weight:500;color:var(--blue3);margin-bottom:1.5rem;letter-spacing:0.05em;text-transform:uppercase}
+.hero-badge .dot{width:6px;height:6px;background:var(--cyan);border-radius:50%;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.3}}
+h1.hero-title{font-size:clamp(2.5rem,4.5vw,3.8rem);font-weight:700;line-height:1.1;margin-bottom:1.2rem;letter-spacing:-0.02em}
+h1.hero-title .highlight{color:var(--blue3)}
+h1.hero-title .accent{color:var(--gold);font-style:italic}
+.hero-desc{font-size:1rem;color:var(--muted);line-height:1.8;margin-bottom:2rem;max-width:480px}
+.hero-desc strong{color:var(--white2)}
+.hero-actions{display:flex;gap:1rem;flex-wrap:wrap}
+.btn-primary{background:var(--blue);color:#fff;padding:0.85rem 2rem;border:none;border-radius:8px;font-size:0.9rem;font-weight:600;cursor:pointer;font-family:var(--font);transition:all .2s;letter-spacing:0.02em}
+.btn-primary:hover{background:var(--blue2);transform:translateY(-1px)}
+.btn-secondary{background:transparent;color:var(--blue3);padding:0.85rem 2rem;border:1.5px solid var(--border2);border-radius:8px;font-size:0.9rem;font-weight:600;cursor:pointer;font-family:var(--font);transition:all .2s}
+.btn-secondary:hover{border-color:var(--blue3);background:rgba(59,130,246,0.08)}
+.hero-stats{display:flex;gap:2.5rem;margin-top:2.5rem;padding-top:2rem;border-top:1px solid var(--border)}
+.stat{text-align:center}
+.stat-n{font-size:1.8rem;font-weight:700;color:var(--blue3);line-height:1}
+.stat-l{font-size:0.7rem;color:var(--muted);margin-top:0.3rem;letter-spacing:0.05em;text-transform:uppercase}
+.hero-code{background:var(--card);border:1px solid var(--border);border-radius:12px;overflow:hidden;font-family:var(--mono)}
+.code-bar{background:var(--navy3);padding:0.7rem 1rem;display:flex;align-items:center;gap:0.5rem;border-bottom:1px solid var(--border)}
+.code-dot{width:10px;height:10px;border-radius:50%}
+.code-title{font-size:0.72rem;color:var(--muted);margin-left:0.5rem}
+.code-body{padding:1.5rem;font-size:0.82rem;line-height:1.8}
+.c-kw{color:#c084fc}.c-fn{color:#60a5fa}.c-str{color:#34d399}.c-num{color:#f97316}.c-cm{color:#4a6690;font-style:italic}.c-var{color:#f8faff}.c-op{color:#94a3b8}
+.code-output{background:var(--navy2);padding:0.8rem 1.5rem;border-top:1px solid var(--border);font-size:0.78rem;color:var(--green)}
+.ticker{overflow:hidden;padding:0.8rem 0;background:var(--navy2);border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+.ticker-track{display:flex;gap:2rem;animation:tickanim 30s linear infinite;white-space:nowrap}
+@keyframes tickanim{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+.tick-i{font-size:0.68rem;letter-spacing:0.25em;text-transform:uppercase;color:var(--muted2);display:flex;align-items:center;gap:1rem}
+.tick-sep{color:var(--blue);font-size:0.7rem}
+.section{padding:5rem 4rem}
+.section-tag{font-size:0.68rem;letter-spacing:0.35em;text-transform:uppercase;color:var(--blue3);margin-bottom:0.8rem;font-weight:600}
+.section-title{font-size:clamp(1.8rem,3vw,2.6rem);font-weight:700;letter-spacing:-0.02em;margin-bottom:0.6rem}
+.section-sub{font-size:0.92rem;color:var(--muted);line-height:1.7;max-width:560px;margin-bottom:3rem}
+#courses{background:var(--navy)}
+.course-tabs{display:flex;gap:0.5rem;margin-bottom:2.5rem;flex-wrap:wrap}
+.tab{padding:0.5rem 1.2rem;border:1px solid var(--border);border-radius:20px;font-size:0.78rem;font-weight:500;cursor:pointer;transition:all .2s;background:transparent;color:var(--muted);font-family:var(--font)}
+.tab.act,.tab:hover{background:var(--blue);color:#fff;border-color:var(--blue)}
+.course-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.2rem}
+.ccard{background:var(--card);border:1px solid var(--border);border-radius:12px;overflow:hidden;cursor:pointer;transition:all .3s}
+.ccard:hover{border-color:var(--border2);transform:translateY(-3px);box-shadow:0 12px 40px rgba(0,0,0,0.4)}
+.ccard-top{padding:1.5rem 1.5rem 1rem;position:relative}
+.ccard-icon{width:44px;height:44px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.3rem;margin-bottom:1rem}
+.ccard-badge{position:absolute;top:1rem;right:1rem;font-size:0.62rem;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;padding:0.25rem 0.6rem;border-radius:12px}
+.badge-free{background:rgba(16,185,129,0.15);color:var(--green);border:1px solid rgba(16,185,129,0.3)}
+.badge-new{background:rgba(245,158,11,0.15);color:var(--gold2);border:1px solid rgba(245,158,11,0.3)}
+.ccard-title{font-size:1rem;font-weight:600;margin-bottom:0.4rem;line-height:1.3}
+.ccard-desc{font-size:0.78rem;color:var(--muted);line-height:1.6;margin-bottom:0.8rem}
+.ccard-caption{font-size:0.72rem;color:var(--muted2);line-height:1.6;margin-bottom:1rem;font-style:italic;padding:0.6rem 0.8rem;background:var(--navy3);border-radius:6px;border-left:2px solid var(--blue)}
+.ccard-bottom{padding:0.8rem 1.5rem;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center}
+.ccard-lessons{font-size:0.72rem;color:var(--muted)}
+.ccard-btn{font-size:0.72rem;font-weight:600;color:var(--blue3);background:none;border:none;cursor:pointer;font-family:var(--font);transition:color .2s}
+.ccard:hover .ccard-btn{color:var(--white)}
+#python-section{background:var(--navy2);border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+.py-layout{display:grid;grid-template-columns:300px 1fr;gap:2rem;align-items:start}
+.py-sidebar{background:var(--card);border:1px solid var(--border);border-radius:12px;overflow:hidden;position:sticky;top:80px}
+.py-sidebar-head{background:var(--navy3);padding:1.2rem 1.5rem;border-bottom:1px solid var(--border)}
+.py-sidebar-title{font-size:0.82rem;font-weight:700;color:var(--blue3);text-transform:uppercase;letter-spacing:0.08em}
+.py-lesson-list{list-style:none;padding:0.8rem 0}
+.py-lesson{padding:0.65rem 1.5rem;font-size:0.82rem;color:var(--muted);cursor:pointer;transition:all .2s;display:flex;align-items:center;gap:0.7rem;border-left:2px solid transparent}
+.py-lesson.act{color:var(--blue3);background:rgba(37,99,235,0.08);border-left-color:var(--blue3)}
+.py-lesson:hover{color:var(--white2);background:rgba(255,255,255,0.03)}
+.py-lesson .lesson-num{font-size:0.65rem;color:var(--muted2);font-family:var(--mono);width:20px}
+.py-lesson .lesson-done{color:var(--green);font-size:0.8rem;margin-left:auto}
+.py-lesson-header{margin-bottom:2rem}
+.lesson-title{font-size:1.6rem;font-weight:700;margin-bottom:0.5rem;letter-spacing:-0.01em}
+.lesson-meta{font-size:0.78rem;color:var(--muted);display:flex;gap:1.5rem;align-items:center}
+.py-theory{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:1.5rem;margin-bottom:1.5rem}
+.py-theory h4{font-size:0.72rem;text-transform:uppercase;letter-spacing:0.12em;color:var(--blue3);margin-bottom:1rem;font-weight:700}
+.py-theory p{font-size:0.88rem;color:var(--white2);line-height:1.9;margin-bottom:0.8rem}
+.py-theory p:last-child{margin-bottom:0}
+.py-theory ul{padding-left:1.2rem;margin-top:0.5rem}
+.py-theory li{font-size:0.85rem;color:var(--muted);line-height:1.8;margin-bottom:0.2rem}
+.py-theory li strong{color:var(--white2)}
+.code-block{background:var(--navy);border:1px solid var(--border);border-radius:10px;overflow:hidden;margin-bottom:1.5rem}
+.cb-header{background:var(--navy3);padding:0.65rem 1.2rem;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--border)}
+.cb-label{font-size:0.68rem;font-family:var(--mono);color:var(--muted);letter-spacing:0.05em}
+.cb-lang{font-size:0.62rem;background:rgba(37,99,235,0.2);color:var(--blue3);padding:0.2rem 0.6rem;border-radius:4px;font-weight:600}
+.cb-code{padding:1.2rem 1.5rem;font-family:var(--mono);font-size:0.82rem;line-height:1.9;overflow-x:auto}
+.cb-output{background:var(--navy2);padding:0.8rem 1.5rem;border-top:1px solid var(--border);font-family:var(--mono);font-size:0.78rem}
+.out-label{font-size:0.62rem;text-transform:uppercase;letter-spacing:0.1em;color:var(--muted2);margin-bottom:0.4rem}
+.out-text{color:var(--green)}
+.tip-box{background:rgba(6,182,212,0.06);border:1px solid rgba(6,182,212,0.2);border-radius:10px;padding:1.2rem 1.5rem;margin-bottom:1.5rem}
+.tip-title{font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:var(--cyan);margin-bottom:0.6rem}
+.tip-text{font-size:0.85rem;color:var(--white2);line-height:1.75}
+.warning-box{background:rgba(245,158,11,0.06);border:1px solid rgba(245,158,11,0.2);border-radius:10px;padding:1.2rem 1.5rem;margin-bottom:1.5rem}
+.warning-title{font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:var(--gold2);margin-bottom:0.6rem}
+.warning-text{font-size:0.85rem;color:var(--white2);line-height:1.75}
+.exercise{background:rgba(16,185,129,0.05);border:1px solid rgba(16,185,129,0.2);border-radius:10px;padding:1.5rem;margin-bottom:1.5rem}
+.ex-title{font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:var(--green);margin-bottom:0.8rem}
+.ex-task{font-size:0.88rem;color:var(--white2);line-height:1.75;margin-bottom:0.8rem}
+.ex-hint{font-size:0.78rem;color:var(--muted);font-style:italic}
+.nav-btns{display:flex;gap:1rem;margin-top:2rem}
+.nav-btn{padding:0.7rem 1.5rem;border-radius:8px;font-size:0.82rem;font-weight:600;cursor:pointer;font-family:var(--font);transition:all .2s}
+.nb-prev{background:transparent;border:1.5px solid var(--border2);color:var(--muted)}
+.nb-next{background:var(--blue);border:none;color:#fff}
+.nb-next:hover{background:var(--blue2)}
+#about{background:var(--navy2)}
+.about-grid{display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:center}
+.about-card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:2rem;margin-bottom:1rem}
+.about-card-title{font-size:0.72rem;text-transform:uppercase;letter-spacing:0.1em;color:var(--blue3);margin-bottom:1rem;font-weight:700}
+.tech-pills{display:flex;flex-wrap:wrap;gap:0.5rem}
+.tech-pill{background:var(--navy3);border:1px solid var(--border);border-radius:6px;padding:0.35rem 0.8rem;font-size:0.75rem;color:var(--muted);font-family:var(--mono)}
+.about-text p{font-size:0.92rem;color:var(--muted);line-height:1.9;margin-bottom:1rem}
+.about-text strong{color:var(--white2)}
+.feature-list{list-style:none;margin-top:1.5rem}
+.feature-list li{padding:0.6rem 0;border-bottom:1px solid var(--border);font-size:0.88rem;color:var(--white2);display:flex;align-items:center;gap:0.8rem}
+.feature-list li::before{content:'✦';color:var(--blue3);font-size:0.7rem}
+.feature-list li:last-child{border-bottom:none}
+footer{background:var(--navy2);border-top:1px solid var(--border);padding:3rem 4rem 2rem}
+.footer-grid{display:grid;grid-template-columns:2fr 1fr 1fr;gap:3rem;margin-bottom:2.5rem}
+.footer-brand p{font-size:0.82rem;color:var(--muted);line-height:1.7}
+.footer-col-title{font-size:0.72rem;text-transform:uppercase;letter-spacing:0.15em;color:var(--blue3);margin-bottom:1rem;font-weight:700}
+.footer-links{list-style:none}
+.footer-links li{margin-bottom:0.6rem}
+.footer-links a{font-size:0.82rem;color:var(--muted);text-decoration:none;transition:color .2s}
+.footer-links a:hover{color:var(--white)}
+.footer-bottom{border-top:1px solid var(--border);padding-top:1.5rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem}
+.footer-copy{font-size:0.78rem;color:var(--muted2)}
+.creator-credit{font-size:0.9rem;font-weight:600;color:var(--white2);display:flex;align-items:center;gap:0.5rem}
+.creator-credit .heart{color:var(--red)}
+.creator-name{color:var(--blue3);font-weight:700;letter-spacing:0.02em}
+.modal-bg{display:none;position:fixed;inset:0;background:rgba(5,10,20,0.92);z-index:2000;overflow-y:auto;padding:2rem}
+.modal-bg.open{display:flex;align-items:flex-start;justify-content:center}
+.modal-box{background:var(--card);border:1px solid var(--border2);border-radius:16px;max-width:800px;width:100%;margin-top:2rem;overflow:hidden}
+.modal-head{background:var(--navy3);padding:1.5rem 2rem;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center}
+.modal-head-title{font-size:1.1rem;font-weight:700}
+.modal-close-btn{background:none;border:none;color:var(--muted);font-size:1rem;cursor:pointer;font-family:var(--font);transition:color .2s}
+.modal-close-btn:hover{color:var(--white)}
+.modal-body{padding:2rem}
+.progress-bar-wrap{background:var(--border);border-radius:4px;height:4px;margin-top:0.8rem;overflow:hidden}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--blue),var(--cyan));border-radius:4px;transition:width .5s}
+/* ===========================
+   MOBILE RESPONSIVE
+=========================== */
+
+html, body {
+    overflow-x: hidden;
+    width: 100%;
+}
+
+img {
+    max-width: 100%;
+    height: auto;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+@media (max-width: 768px) {
+
+    body{
+        overflow-x:hidden;
+    }
+
+    /* Container */
+    .container{
+        width:100%;
+        padding:0 18px;
+    }
+
+    /* Navbar */
+    nav{
+        padding:15px 18px;
+        flex-wrap:wrap;
+    }
+
+    .nav-links{
+        gap:15px;
+        flex-wrap:wrap;
+        justify-content:center;
+    }
+
+    .logo{
+        font-size:22px;
+    }
+
+    /* Hero */
+    .hero{
+        display:flex;
+        flex-direction:column;
+        text-align:center;
+        gap:40px;
+        padding:60px 20px;
+    }
+
+    .hero-content{
+        width:100%;
+    }
+
+    .hero h1{
+        font-size:42px;
+        line-height:1.2;
+    }
+
+    .hero p{
+        font-size:18px;
+    }
+
+    .hero-buttons{
+        display:flex;
+        flex-direction:column;
+        gap:15px;
+    }
+
+    .hero-buttons a{
+        width:100%;
+    }
+
+    .code-window{
+        width:100%;
+        overflow:auto;
+    }
+
+    /* Course Cards */
+    .courses-grid{
+        display:grid;
+        grid-template-columns:1fr;
+        gap:20px;
+    }
+
+    .course-card{
+        width:100%;
+    }
+
+    /* Sections */
+    section{
+        padding:60px 20px;
+    }
+
+    h2{
+        font-size:34px;
+    }
+
+    /* Footer */
+    .footer-content{
+        display:flex;
+        flex-direction:column;
+        gap:25px;
+        text-align:center;
+    }
+
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="logo">
+    <div class="logo-icon">🤖</div>
+    <div class="logo-text">Pakistan <span>AI Hub</span></div>
+  </div>
+  <ul class="nav-links">
+    <li><a href="#home">Home</a></li>
+    <li><a href="#courses">Courses</a></li>
+    <li><a href="#python-section">Python</a></li>
+    <li><a href="#about">About</a></li>
+  </ul>
+  <button class="nav-cta" onclick="document.getElementById('courses').scrollIntoView({behavior:'smooth'})">Start for Free</button>
+</nav>
+
+<section class="hero" id="home">
+  <div class="hero-left">
+    <div class="hero-badge"><span class="dot"></span> Pakistan's #1 AI Learning Platform</div>
+    <h1 class="hero-title">
+      Learn <span class="highlight">Artificial Intelligence</span><br>
+      <span class="accent">Completely Free</span> — From Pakistan
+    </h1>
+    <p class="hero-desc">
+      <strong>Python, Machine Learning, and AI</strong> — explained in simple, easy English with detailed lessons, real code examples, and step-by-step explanations so every student truly understands.
+    </p>
+    <div class="hero-actions">
+      <button class="btn-primary" onclick="document.getElementById('courses').scrollIntoView({behavior:'smooth'})">🚀 Browse Courses</button>
+      <button class="btn-secondary" onclick="document.getElementById('python-section').scrollIntoView({behavior:'smooth'})">Learn Python →</button>
+    </div>
+    <div class="hero-stats">
+      <div class="stat"><div class="stat-n">5,000+</div><div class="stat-l">Active Students</div></div>
+      <div class="stat"><div class="stat-n">12</div><div class="stat-l">Free Courses</div></div>
+      <div class="stat"><div class="stat-n">100%</div><div class="stat-l">Always Free</div></div>
+    </div>
+  </div>
+  <div class="hero-right">
+    <div class="hero-code">
+      <div class="code-bar">
+        <div class="code-dot" style="background:#ef4444"></div>
+        <div class="code-dot" style="background:#f59e0b"></div>
+        <div class="code-dot" style="background:#10b981"></div>
+        <span class="code-title">first_ai_program.py</span>
+      </div>
+      <div class="code-body">
+        <span class="c-cm"># My first AI program — Pakistan AI Hub</span><br>
+        <span class="c-kw">import</span> <span class="c-fn">random</span><br><br>
+        <span class="c-cm"># A list of student questions</span><br>
+        <span class="c-var">questions</span> <span class="c-op">=</span> [<br>
+        &nbsp;&nbsp;<span class="c-str">"What is Artificial Intelligence?"</span>,<br>
+        &nbsp;&nbsp;<span class="c-str">"Why should I learn Python?"</span>,<br>
+        &nbsp;&nbsp;<span class="c-str">"Are there AI jobs in Pakistan?"</span><br>
+        ]<br><br>
+        <span class="c-kw">def</span> <span class="c-fn">ai_answer</span>(<span class="c-var">question</span>):<br>
+        &nbsp;&nbsp;<span class="c-var">score</span> <span class="c-op">=</span> <span class="c-fn">len</span>(<span class="c-var">question</span>) <span class="c-op">*</span> <span class="c-num">2</span><br>
+        &nbsp;&nbsp;<span class="c-kw">return</span> <span class="c-str">f"🤖 Processing... Score: </span><span class="c-kw">{</span><span class="c-var">score</span><span class="c-kw">}</span><span class="c-str">"</span><br><br>
+        <span class="c-kw">for</span> <span class="c-var">q</span> <span class="c-kw">in</span> <span class="c-var">questions</span>:<br>
+        &nbsp;&nbsp;<span class="c-fn">print</span>(<span class="c-fn">ai_answer</span>(<span class="c-var">q</span>))
+      </div>
+      <div class="code-output">
+        ✅ Output:<br>
+        🤖 Processing... Score: 58<br>
+        🤖 Processing... Score: 50<br>
+        🤖 Processing... Score: 54
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="ticker">
+  <div class="ticker-track" id="ttk"></div>
+</div>
+
+<section class="section" id="courses">
+  <div class="section-tag">Learning Paths</div>
+  <div class="section-title">Our Free Courses</div>
+  <p class="section-sub">Every course has detailed explanations in simple English, real code examples you can run, and hands-on exercises — so you don't just read, you actually understand.</p>
+  <div class="course-tabs">
+    <button class="tab act" data-t="all">All Courses</button>
+    <button class="tab" data-t="ai">AI & ML</button>
+    <button class="tab" data-t="web">Web Dev</button>
+    <button class="tab" data-t="career">Career</button>
+  </div>
+  <div class="course-grid" id="cgrid"></div>
+</section>
+
+<section class="section" id="python-section">
+  <div class="section-tag">Featured Course</div>
+  <div class="section-title">🐍 Python Complete Course</div>
+  <p class="section-sub">Python is the foundation of AI and Machine Learning. Every concept here is explained in simple, clear English — from your very first variable all the way to building a real AI program.</p>
+  <div class="py-layout">
+    <div class="py-sidebar">
+      <div class="py-sidebar-head">
+        <div class="py-sidebar-title">Course Content</div>
+        <div class="progress-bar-wrap"><div class="progress-fill" style="width:20%"></div></div>
+        <div style="font-size:0.65rem;color:var(--muted);margin-top:0.4rem">1 of 5 complete</div>
+      </div>
+      <ul class="py-lesson-list" id="pylessonlist"></ul>
+    </div>
+    <div class="py-content" id="pycontent"></div>
+  </div>
+</section>
+
+<section class="section" id="about">
+  <div class="about-grid">
+    <div class="about-text">
+      <div class="section-tag">About Us</div>
+      <div class="section-title">AI Education for Pakistan</div>
+      <p>Pakistan AI Hub is on a mission — to bring <strong>world-class AI and programming education</strong> to every student in Pakistan, completely free of charge.</p>
+      <p>Our courses are written in <strong>simple, easy English</strong> that any student can understand. Every lesson includes detailed theory, working code examples, and exercises. We want every Pakistani student to learn AI and secure their future.</p>
+      <ul class="feature-list">
+        <li>Simple, easy English explanations for every topic</li>
+        <li>Real, working code examples in every lesson</li>
+        <li>Step-by-step exercises and quizzes</li>
+        <li>Industry-level Python and AI projects</li>
+        <li>Completely free — no hidden fees ever</li>
+        <li>Content tailored for the Pakistan job market</li>
+      </ul>
+    </div>
+    <div class="about-visual">
+      <div class="about-card">
+        <div class="about-card-title">Technologies You Will Learn</div>
+        <div class="tech-pills">
+          <span class="tech-pill">Python</span><span class="tech-pill">NumPy</span><span class="tech-pill">Pandas</span>
+          <span class="tech-pill">Scikit-learn</span><span class="tech-pill">TensorFlow</span><span class="tech-pill">HTML/CSS</span>
+          <span class="tech-pill">JavaScript</span><span class="tech-pill">Machine Learning</span><span class="tech-pill">Deep Learning</span>
+          <span class="tech-pill">ChatGPT API</span><span class="tech-pill">Data Analysis</span><span class="tech-pill">Freelancing</span>
+        </div>
+      </div>
+      <div class="about-card">
+        <div class="about-card-title">Student Success</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem">
+          <div style="text-align:center;padding:1rem;background:var(--navy3);border-radius:8px">
+            <div style="font-size:1.8rem;font-weight:700;color:var(--blue3)">92%</div>
+            <div style="font-size:0.7rem;color:var(--muted);margin-top:0.3rem">Course Completion Rate</div>
+          </div>
+          <div style="text-align:center;padding:1rem;background:var(--navy3);border-radius:8px">
+            <div style="font-size:1.8rem;font-weight:700;color:var(--green)">4.9★</div>
+            <div style="font-size:0.7rem;color:var(--muted);margin-top:0.3rem">Average Rating</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <div class="logo" style="margin-bottom:1rem">
+        <div class="logo-icon">🤖</div>
+        <div class="logo-text">Pakistan <span>AI Hub</span></div>
+      </div>
+      <p>World-class AI and programming education for students in Pakistan — completely free, in simple English.</p>
+    </div>
+    <div>
+      <div class="footer-col-title">Courses</div>
+      <ul class="footer-links">
+        <li><a href="#">Python Course</a></li>
+        <li><a href="#">Machine Learning</a></li>
+        <li><a href="#">Web Development</a></li>
+        <li><a href="#">AI Tools Guide</a></li>
+        <li><a href="#">Freelancing</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="footer-col-title">Platform</div>
+      <ul class="footer-links">
+        <li><a href="#">About Us</a></li>
+        <li><a href="#">Our Mission</a></li>
+        <li><a href="#">Contact</a></li>
+        <li><a href="#">Privacy Policy</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div class="footer-copy">© 2024 Pakistan AI Hub. All rights reserved. 🇵🇰</div>
+    <div class="creator-credit">
+      <span class="heart">♥</span> Created with passion by <span class="creator-name">Tuba Sehar</span>
+    </div>
+  </div>
+</footer>
+
+<div class="modal-bg" id="modal">
+  <div class="modal-box">
+    <div class="modal-head">
+      <div class="modal-head-title" id="modal-title">Course</div>
+      <button class="modal-close-btn" onclick="closeMod()">✕ Close</button>
+    </div>
+    <div class="modal-body" id="modal-body"></div>
+  </div>
+</div>
+
+<script>
+const courses=[
+  {id:'python',cat:'ai',icon:'🐍',iconBg:'linear-gradient(135deg,#2563eb,#06b6d4)',title:'Python for AI',desc:'Learn Python from absolute zero — variables, loops, functions, and real AI programs.',caption:'Python is the most important language for AI jobs in Pakistan. Every concept is explained step by step in simple English.',lessons:5,badge:'new',badgeClass:'badge-new'},
+  {id:'ml',cat:'ai',icon:'🧠',iconBg:'linear-gradient(135deg,#7c3aed,#2563eb)',title:'Machine Learning Basics',desc:'Understand ML algorithms — regression, classification, and practice on real datasets.',caption:'Learn Machine Learning and get data science jobs — the demand in Pakistan is growing every year.',lessons:6,badge:'free',badgeClass:'badge-free'},
+  {id:'ai-tools',cat:'ai',icon:'🤖',iconBg:'linear-gradient(135deg,#0ea5e9,#10b981)',title:'AI Tools Guide',desc:'ChatGPT, Gemini, Midjourney — learn to use professional AI tools to boost productivity.',caption:'AI tools can multiply your productivity 10x — essential for freelancing and tech jobs alike.',lessons:4,badge:'free',badgeClass:'badge-free'},
+  {id:'html',cat:'web',icon:'🌐',iconBg:'linear-gradient(135deg,#f59e0b,#ef4444)',title:'HTML Complete Course',desc:'Web development foundation — HTML structure, forms, tables, and semantic elements.',caption:'HTML is the very first step for every web developer. Every tag is explained with clear examples.',lessons:5,badge:'free',badgeClass:'badge-free'},
+  {id:'css',cat:'web',icon:'🎨',iconBg:'linear-gradient(135deg,#ec4899,#8b5cf6)',title:'CSS Styling & Design',desc:'Build beautiful websites — CSS selectors, flexbox, grid, and animations.',caption:'Learn to make websites look great with CSS — every property is fully explained with examples.',lessons:5,badge:'free',badgeClass:'badge-free'},
+  {id:'js',cat:'web',icon:'⚡',iconBg:'linear-gradient(135deg,#f59e0b,#10b981)',title:'JavaScript Basics',desc:'Add interactivity to websites — DOM, events, and modern ES6 JavaScript.',caption:'JavaScript is the engine of the web — modern web development is impossible without it.',lessons:5,badge:'free',badgeClass:'badge-free'},
+  {id:'fiverr',cat:'career',icon:'💰',iconBg:'linear-gradient(135deg,#10b981,#0ea5e9)',title:'Fiverr Complete Guide',desc:'Create your Fiverr account, set up gigs, and land your first order.',caption:'Work on Fiverr from Pakistan and earn in dollars — a complete step-by-step guide.',lessons:5,badge:'free',badgeClass:'badge-free'},
+  {id:'cv',cat:'career',icon:'📄',iconBg:'linear-gradient(135deg,#6366f1,#ec4899)',title:'CV & Interview Prep',desc:'Build a professional CV and prepare for tech job interviews with confidence.',caption:'A strong CV and confident interview skills open doors — in Pakistan and abroad.',lessons:5,badge:'free',badgeClass:'badge-free'},
+  {id:'deep',cat:'ai',icon:'🔬',iconBg:'linear-gradient(135deg,#ef4444,#f59e0b)',title:'Deep Learning Intro',desc:'Neural network basics — build your first model using TensorFlow and Keras.',caption:'Deep Learning is the highest level of AI — explained here in simple, clear English.',lessons:4,badge:'new',badgeClass:'badge-new'},
+];
+
+function renderCourses(filter='all'){
+  const grid=document.getElementById('cgrid');
+  const list=filter==='all'?courses:courses.filter(c=>c.cat===filter);
+  grid.innerHTML=list.map(c=>`
+    <div class="ccard" onclick="${c.id==='python'?`document.getElementById('python-section').scrollIntoView({behavior:'smooth'})`:`openCourse('${c.id}')`}">
+      <div class="ccard-top">
+        <div class="ccard-icon" style="background:${c.iconBg}">${c.icon}</div>
+        <div class="ccard-badge ${c.badgeClass}">${c.badge==='new'?'🆕 New':'✅ Free'}</div>
+        <div class="ccard-title">${c.title}</div>
+        <div class="ccard-desc">${c.desc}</div>
+        <div class="ccard-caption">${c.caption}</div>
+      </div>
+      <div class="ccard-bottom">
+        <span class="ccard-lessons">📚 ${c.lessons} Lessons · Free</span>
+        <button class="ccard-btn">Start Now →</button>
+      </div>
+    </div>`).join('');
+}
+document.querySelectorAll('.tab').forEach(t=>t.addEventListener('click',function(){
+  document.querySelectorAll('.tab').forEach(x=>x.classList.remove('act'));
+  this.classList.add('act');renderCourses(this.dataset.t);
+}));
+
+const pyLessons=[
+  {title:"What is Python? (Introduction)",meta:"15 min · Beginner · Easy English",
+  content:`
+    <div class="py-theory">
+      <h4>🎯 What Will You Learn in This Lesson?</h4>
+      <p>In this lesson we will understand what Python is, why you should learn it, and how to install it on your computer. Everything is explained in simple, clear English so there is no confusion.</p>
+    </div>
+    <div class="py-theory">
+      <h4>📖 What is Python?</h4>
+      <p>Python is a <strong>programming language</strong> — a way of giving instructions to a computer. Just like we speak English to communicate with people, Python is a language that computers understand.</p>
+      <p>Python was created in 1991 by Guido van Rossum. Today, AI, Machine Learning, websites, games, and data science are all built with Python around the world.</p>
+      <ul>
+        <li><strong>Easy to read:</strong> Python looks like English, so it is very easy to learn</li>
+        <li><strong>Versatile:</strong> Used in AI, web apps, games, and automation</li>
+        <li><strong>Jobs:</strong> Python developers are in very high demand in Pakistan and worldwide</li>
+        <li><strong>Free:</strong> Python is completely free to download and use</li>
+      </ul>
+    </div>
+    <div class="tip-box">
+      <div class="tip-title">💡 Simple Tip — Think of Python as a Recipe</div>
+      <div class="tip-text">Think of Python like a recipe — you give the computer step-by-step instructions and it follows them exactly. Just like a chef follows a recipe to cook food, the computer follows your Python code!</div>
+    </div>
+    <div class="code-block">
+      <div class="cb-header"><span class="cb-label">first_program.py — Your Very First Python Code</span><span class="cb-lang">Python</span></div>
+      <div class="cb-code">
+        <span class="c-cm"># Lines starting with "#" are comments — Python ignores them</span><br>
+        <span class="c-cm"># We write comments as notes for ourselves</span><br><br>
+        <span class="c-cm"># print() shows text on the screen</span><br>
+        <span class="c-fn">print</span>(<span class="c-str">"Hello from Pakistan! 🇵🇰"</span>)<br>
+        <span class="c-fn">print</span>(<span class="c-str">"My name is Python 🐍"</span>)<br>
+        <span class="c-fn">print</span>(<span class="c-str">"I am starting to learn programming!"</span>)
+      </div>
+      <div class="cb-output"><div class="out-label">▶ Output (what appears on screen):</div><div class="out-text">Hello from Pakistan! 🇵🇰<br>My name is Python 🐍<br>I am starting to learn programming!</div></div>
+    </div>
+    <div class="warning-box">
+      <div class="warning-title">⚠️ Important — Spelling Matters!</div>
+      <div class="warning-text">In Python, <strong>spelling and uppercase/lowercase letters are different</strong>. <code style="color:var(--gold2)">print</code> and <code style="color:var(--gold2)">Print</code> are NOT the same! Always write <code style="color:var(--gold2)">print()</code> in lowercase letters.</div>
+    </div>
+    <div class="exercise">
+      <div class="ex-title">✏️ Exercise — Try It Yourself</div>
+      <div class="ex-task">Write a program that prints your name and your city. For example, if your name is "Tuba" and you live in Lahore, the output should be:<br><br>
+      <code style="color:var(--green);font-family:var(--mono)">My name is Tuba<br>I am from Lahore<br>Pakistan Zindabad! 🇵🇰</code></div>
+      <div class="ex-hint">💭 Hint: Use print() three times, once for each line</div>
+    </div>`},
+  {title:"Variables and Data Types",meta:"20 min · Beginner · Easy English",
+  content:`
+    <div class="py-theory">
+      <h4>📖 What is a Variable?</h4>
+      <p>A variable is like a <strong>container or box</strong> where you store data. Just like a box can hold anything — books, food, clothes — a variable can hold any value.</p>
+      <p>Creating a variable in Python is very easy — just write a name, put an equals sign, and give it a value.</p>
+    </div>
+    <div class="code-block">
+      <div class="cb-header"><span class="cb-label">variables.py — Understanding Variables</span><span class="cb-lang">Python</span></div>
+      <div class="cb-code">
+        <span class="c-cm"># ======= CREATING VARIABLES =======</span><br>
+        <span class="c-cm"># String (text) — always use quotes</span><br>
+        <span class="c-var">name</span> <span class="c-op">=</span> <span class="c-str">"Tuba Sehar"</span><br>
+        <span class="c-var">city</span> <span class="c-op">=</span> <span class="c-str">"Lahore"</span><br><br>
+        <span class="c-cm"># Integer (whole number) — no quotes needed</span><br>
+        <span class="c-var">age</span> <span class="c-op">=</span> <span class="c-num">20</span><br>
+        <span class="c-var">total_courses</span> <span class="c-op">=</span> <span class="c-num">5</span><br><br>
+        <span class="c-cm"># Float (decimal number)</span><br>
+        <span class="c-var">percentage</span> <span class="c-op">=</span> <span class="c-num">92.5</span><br><br>
+        <span class="c-cm"># Boolean (only True or False)</span><br>
+        <span class="c-var">is_student</span> <span class="c-op">=</span> <span class="c-kw">True</span><br>
+        <span class="c-var">is_paid</span> <span class="c-op">=</span> <span class="c-kw">False</span><br><br>
+        <span class="c-cm"># Print all variables using f-strings</span><br>
+        <span class="c-fn">print</span>(<span class="c-str">f"Name: </span><span class="c-kw">{name}</span><span class="c-str">"</span>)<br>
+        <span class="c-fn">print</span>(<span class="c-str">f"City: </span><span class="c-kw">{city}</span><span class="c-str">"</span>)<br>
+        <span class="c-fn">print</span>(<span class="c-str">f"Age: </span><span class="c-kw">{age}</span><span class="c-str"> years"</span>)<br>
+        <span class="c-fn">print</span>(<span class="c-str">f"Result: </span><span class="c-kw">{percentage}</span><span class="c-str">%"</span>)
+      </div>
+      <div class="cb-output"><div class="out-label">▶ Output:</div><div class="out-text">Name: Tuba Sehar<br>City: Lahore<br>Age: 20 years<br>Result: 92.5%</div></div>
+    </div>
+    <div class="py-theory">
+      <h4>🔢 The 4 Main Data Types</h4>
+      <ul>
+        <li><strong>str (String):</strong> Text value — "Tuba", "Pakistan", "Hello World"</li>
+        <li><strong>int (Integer):</strong> Whole number — 5, 100, -20</li>
+        <li><strong>float:</strong> Decimal number — 3.14, 92.5, -1.5</li>
+        <li><strong>bool (Boolean):</strong> Only two values — True or False</li>
+      </ul>
+    </div>
+    <div class="code-block">
+      <div class="cb-header"><span class="cb-label">type_check.py — How to Check a Variable's Type</span><span class="cb-lang">Python</span></div>
+      <div class="cb-code">
+        <span class="c-var">x</span> <span class="c-op">=</span> <span class="c-str">"Pakistan"</span><br>
+        <span class="c-var">y</span> <span class="c-op">=</span> <span class="c-num">2024</span><br>
+        <span class="c-var">z</span> <span class="c-op">=</span> <span class="c-num">9.99</span><br><br>
+        <span class="c-fn">print</span>(<span class="c-fn">type</span>(<span class="c-var">x</span>)) <span class="c-cm"># string</span><br>
+        <span class="c-fn">print</span>(<span class="c-fn">type</span>(<span class="c-var">y</span>)) <span class="c-cm"># integer</span><br>
+        <span class="c-fn">print</span>(<span class="c-fn">type</span>(<span class="c-var">z</span>)) <span class="c-cm"># float</span>
+      </div>
+      <div class="cb-output"><div class="out-label">▶ Output:</div><div class="out-text">&lt;class 'str'&gt;<br>&lt;class 'int'&gt;<br>&lt;class 'float'&gt;</div></div>
+    </div>
+    <div class="exercise">
+      <div class="ex-title">✏️ Exercise</div>
+      <div class="ex-task">Create 5 variables about yourself: name, age, city, percentage, and whether you are a student (True/False). Then print all of them using f-strings.</div>
+      <div class="ex-hint">💭 Hint: f"My name is {name}" — put the variable name inside curly brackets</div>
+    </div>`},
+  {title:"If / Else — Conditions and Decisions",meta:"25 min · Beginner · Easy English",
+  content:`
+    <div class="py-theory">
+      <h4>📖 What are Conditions?</h4>
+      <p>In real life we always make decisions: <em>"If it is raining, take an umbrella — otherwise, don't."</em> In Python we do exactly the same thing using <strong>if / else</strong> statements.</p>
+    </div>
+    <div class="code-block">
+      <div class="cb-header"><span class="cb-label">conditions.py — Making Decisions in Python</span><span class="cb-lang">Python</span></div>
+      <div class="cb-code">
+        <span class="c-cm"># Check a student's grade based on marks</span><br>
+        <span class="c-var">marks</span> <span class="c-op">=</span> <span class="c-num">75</span><br><br>
+        <span class="c-kw">if</span> <span class="c-var">marks</span> <span class="c-op">>=</span> <span class="c-num">80</span>:<br>
+        &nbsp;&nbsp;<span class="c-fn">print</span>(<span class="c-str">"🏆 A Grade — Excellent work!"</span>)<br>
+        <span class="c-kw">elif</span> <span class="c-var">marks</span> <span class="c-op">>=</span> <span class="c-num">60</span>:<br>
+        &nbsp;&nbsp;<span class="c-fn">print</span>(<span class="c-str">"✅ B Grade — Good result!"</span>)<br>
+        <span class="c-kw">elif</span> <span class="c-var">marks</span> <span class="c-op">>=</span> <span class="c-num">40</span>:<br>
+        &nbsp;&nbsp;<span class="c-fn">print</span>(<span class="c-str">"📚 C Grade — Keep working harder!"</span>)<br>
+        <span class="c-kw">else</span>:<br>
+        &nbsp;&nbsp;<span class="c-fn">print</span>(<span class="c-str">"❌ Failed — Don't give up, try again!"</span>)
+      </div>
+      <div class="cb-output"><div class="out-label">▶ Output (marks = 75):</div><div class="out-text">✅ B Grade — Good result!</div></div>
+    </div>
+    <div class="code-block">
+      <div class="cb-header"><span class="cb-label">ai_classifier.py — Simple AI Health Checker</span><span class="cb-lang">Python</span></div>
+      <div class="cb-code">
+        <span class="c-cm"># A simple AI that checks body temperature</span><br>
+        <span class="c-var">temperature</span> <span class="c-op">=</span> <span class="c-num">38.5</span> <span class="c-cm"># in Celsius</span><br><br>
+        <span class="c-fn">print</span>(<span class="c-str">"🤖 AI Health Check System"</span>)<br>
+        <span class="c-fn">print</span>(<span class="c-str">f"Temperature: </span><span class="c-kw">{temperature}</span><span class="c-str">°C"</span>)<br><br>
+        <span class="c-kw">if</span> <span class="c-var">temperature</span> <span class="c-op">></span> <span class="c-num">38</span>:<br>
+        &nbsp;&nbsp;<span class="c-fn">print</span>(<span class="c-str">"🔴 WARNING: You have a fever! Please see a doctor."</span>)<br>
+        <span class="c-kw">elif</span> <span class="c-var">temperature</span> <span class="c-op">>=</span> <span class="c-num">36.5</span>:<br>
+        &nbsp;&nbsp;<span class="c-fn">print</span>(<span class="c-str">"🟢 Normal: Everything is fine!"</span>)<br>
+        <span class="c-kw">else</span>:<br>
+        &nbsp;&nbsp;<span class="c-fn">print</span>(<span class="c-str">"🔵 Low temperature: You might feel cold."</span>)
+      </div>
+      <div class="cb-output"><div class="out-label">▶ Output:</div><div class="out-text">🤖 AI Health Check System<br>Temperature: 38.5°C<br>🔴 WARNING: You have a fever! Please see a doctor.</div></div>
+    </div>
+    <div class="tip-box">
+      <div class="tip-title">💡 Indentation is Very Important!</div>
+      <div class="tip-text">In Python, <strong>indentation</strong> (4 spaces or Tab) is required. Code inside an <code style="color:var(--cyan)">if</code> block must be indented. If you forget the indentation, Python will give you an error!</div>
+    </div>
+    <div class="exercise">
+      <div class="ex-title">✏️ Exercise — Build an AI Grader</div>
+      <div class="ex-task">Write a program that checks student marks (0–100) and prints:<br>• 90+ → "A+ — Brilliant!"<br>• 80–89 → "A — Excellent!"<br>• 70–79 → "B — Good!"<br>• 60–69 → "C — Average"<br>• Below 60 → "Try harder next time!"</div>
+      <div class="ex-hint">💭 Hint: Use if / elif / elif / elif / else — one block for each grade</div>
+    </div>`},
+  {title:"Loops — Repeat Tasks Automatically",meta:"25 min · Intermediate · Easy English",
+  content:`
+    <div class="py-theory">
+      <h4>📖 What is a Loop?</h4>
+      <p>Imagine you need to print the names of 100 students. Would you write print() 100 times? Of course not! A <strong>loop</strong> repeats a task automatically — write the code once and run it a thousand times.</p>
+      <p>Python has two types of loops: the <strong>for loop</strong> and the <strong>while loop</strong>.</p>
+    </div>
+    <div class="code-block">
+      <div class="cb-header"><span class="cb-label">for_loop.py — For Loop Examples</span><span class="cb-lang">Python</span></div>
+      <div class="cb-code">
+        <span class="c-cm"># range(5) means numbers 0, 1, 2, 3, 4 (five numbers total)</span><br>
+        <span class="c-kw">for</span> <span class="c-var">i</span> <span class="c-kw">in</span> <span class="c-fn">range</span>(<span class="c-num">5</span>):<br>
+        &nbsp;&nbsp;<span class="c-fn">print</span>(<span class="c-str">f"Lesson </span><span class="c-kw">{i+1}</span><span class="c-str"> complete! ✅"</span>)<br><br>
+        <span class="c-cm"># Loop through a list of cities</span><br>
+        <span class="c-var">cities</span> <span class="c-op">=</span> [<span class="c-str">"Karachi"</span>, <span class="c-str">"Lahore"</span>, <span class="c-str">"Islamabad"</span>, <span class="c-str">"Peshawar"</span>]<br><br>
+        <span class="c-kw">for</span> <span class="c-var">city</span> <span class="c-kw">in</span> <span class="c-var">cities</span>:<br>
+        &nbsp;&nbsp;<span class="c-fn">print</span>(<span class="c-str">f"🏙️ </span><span class="c-kw">{city}</span><span class="c-str"> has Python students!"</span>)
+      </div>
+      <div class="cb-output"><div class="out-label">▶ Output:</div><div class="out-text">Lesson 1 complete! ✅<br>Lesson 2 complete! ✅<br>... and so on<br>🏙️ Karachi has Python students!<br>🏙️ Lahore has Python students!</div></div>
+    </div>
+    <div class="code-block">
+      <div class="cb-header"><span class="cb-label">ai_training.py — AI Training Progress Simulator</span><span class="cb-lang">Python</span></div>
+      <div class="cb-code">
+        <span class="c-cm"># Simulate how an AI model trains and improves</span><br>
+        <span class="c-var">total_epochs</span> <span class="c-op">=</span> <span class="c-num">5</span><br>
+        <span class="c-var">accuracy</span> <span class="c-op">=</span> <span class="c-num">50.0</span><br><br>
+        <span class="c-fn">print</span>(<span class="c-str">"🤖 AI Model Training Started..."</span>)<br>
+        <span class="c-fn">print</span>(<span class="c-str">"-" * 35</span>)<br><br>
+        <span class="c-kw">for</span> <span class="c-var">epoch</span> <span class="c-kw">in</span> <span class="c-fn">range</span>(<span class="c-num">1</span>, <span class="c-var">total_epochs</span><span class="c-op">+</span><span class="c-num">1</span>):<br>
+        &nbsp;&nbsp;<span class="c-var">accuracy</span> <span class="c-op">+=</span> <span class="c-num">8.5</span><br>
+        &nbsp;&nbsp;<span class="c-fn">print</span>(<span class="c-str">f"Epoch </span><span class="c-kw">{epoch}</span><span class="c-str"> | Accuracy: </span><span class="c-kw">{accuracy:.1f}</span><span class="c-str">%"</span>)<br><br>
+        <span class="c-fn">print</span>(<span class="c-str">"-" * 35</span>)<br>
+        <span class="c-fn">print</span>(<span class="c-str">f"✅ Training Done! Final Accuracy: </span><span class="c-kw">{accuracy:.1f}</span><span class="c-str">%"</span>)
+      </div>
+      <div class="cb-output"><div class="out-label">▶ Output:</div><div class="out-text">🤖 AI Model Training Started...<br>-----------------------------------<br>Epoch 1 | Accuracy: 58.5%<br>Epoch 2 | Accuracy: 67.0%<br>Epoch 3 | Accuracy: 75.5%<br>Epoch 4 | Accuracy: 84.0%<br>Epoch 5 | Accuracy: 92.5%<br>-----------------------------------<br>✅ Training Done! Final Accuracy: 92.5%</div></div>
+    </div>
+    <div class="exercise">
+      <div class="ex-title">✏️ Exercise — Multiplication Table</div>
+      <div class="ex-task">Write a program that prints the 5 times table: 5×1=5, 5×2=10 ... all the way to 5×10=50.</div>
+      <div class="ex-hint">💭 Hint: Use for i in range(1, 11): and then calculate 5 * i each time</div>
+    </div>`},
+  {title:"Functions and Mini AI Project",meta:"35 min · Intermediate · Easy English",
+  content:`
+    <div class="py-theory">
+      <h4>📖 What is a Function?</h4>
+      <p>A function is a <strong>reusable block of code</strong> — write it once, use it as many times as you want. Think of it like a machine: build it once, then use it again and again. The <code style="color:var(--blue3)">def</code> keyword creates a function.</p>
+    </div>
+    <div class="code-block">
+      <div class="cb-header"><span class="cb-label">functions.py — Creating and Using Functions</span><span class="cb-lang">Python</span></div>
+      <div class="cb-code">
+        <span class="c-cm"># Define a greeting function</span><br>
+        <span class="c-kw">def</span> <span class="c-fn">greet</span>(<span class="c-var">name</span>):<br>
+        &nbsp;&nbsp;<span class="c-kw">return</span> <span class="c-str">f"Hello, </span><span class="c-kw">{name}</span><span class="c-str">! Welcome to Pakistan AI Hub 👋"</span><br><br>
+        <span class="c-cm"># Define a percentage calculator function</span><br>
+        <span class="c-kw">def</span> <span class="c-fn">calculate_percentage</span>(<span class="c-var">marks</span>, <span class="c-var">total</span>):<br>
+        &nbsp;&nbsp;<span class="c-var">pct</span> <span class="c-op">=</span> (<span class="c-var">marks</span> <span class="c-op">/</span> <span class="c-var">total</span>) <span class="c-op">*</span> <span class="c-num">100</span><br>
+        &nbsp;&nbsp;<span class="c-kw">return</span> <span class="c-fn">round</span>(<span class="c-var">pct</span>, <span class="c-num">2</span>)<br><br>
+        <span class="c-cm"># Call the functions</span><br>
+        <span class="c-fn">print</span>(<span class="c-fn">greet</span>(<span class="c-str">"Tuba"</span>))<br>
+        <span class="c-fn">print</span>(<span class="c-fn">greet</span>(<span class="c-str">"Ahmed"</span>))<br>
+        <span class="c-var">result</span> <span class="c-op">=</span> <span class="c-fn">calculate_percentage</span>(<span class="c-num">85</span>, <span class="c-num">100</span>)<br>
+        <span class="c-fn">print</span>(<span class="c-str">f"Your percentage: </span><span class="c-kw">{result}</span><span class="c-str">%"</span>)
+      </div>
+      <div class="cb-output"><div class="out-label">▶ Output:</div><div class="out-text">Hello, Tuba! Welcome to Pakistan AI Hub 👋<br>Hello, Ahmed! Welcome to Pakistan AI Hub 👋<br>Your percentage: 85.0%</div></div>
+    </div>
+    <div class="code-block">
+      <div class="cb-header"><span class="cb-label">mini_ai_chatbot.py — 🤖 Your First AI Chatbot!</span><span class="cb-lang">Python</span></div>
+      <div class="cb-code">
+        <span class="c-cm"># ===== PAKISTAN AI HUB — MINI CHATBOT =====</span><br>
+        <span class="c-cm"># This is the final project of the Python course!</span><br><br>
+        <span class="c-kw">def</span> <span class="c-fn">ai_response</span>(<span class="c-var">message</span>):<br>
+        &nbsp;&nbsp;<span class="c-cm">"""A simple AI chatbot that answers common questions"""</span><br>
+        &nbsp;&nbsp;<span class="c-var">message</span> <span class="c-op">=</span> <span class="c-var">message</span>.<span class="c-fn">lower</span>() <span class="c-cm"># convert to lowercase</span><br><br>
+        &nbsp;&nbsp;<span class="c-kw">if</span> <span class="c-str">"python"</span> <span class="c-kw">in</span> <span class="c-var">message</span>:<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;<span class="c-kw">return</span> <span class="c-str">"🐍 Python is the best language for AI! Very high demand in Pakistan."</span><br>
+        &nbsp;&nbsp;<span class="c-kw">elif</span> <span class="c-str">"job"</span> <span class="c-kw">in</span> <span class="c-var">message</span>:<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;<span class="c-kw">return</span> <span class="c-str">"💼 AI jobs pay PKR 100k–500k+ per month. Keep learning!"</span><br>
+        &nbsp;&nbsp;<span class="c-kw">elif</span> <span class="c-str">"pakistan"</span> <span class="c-kw">in</span> <span class="c-var">message</span>:<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;<span class="c-kw">return</span> <span class="c-str">"🇵🇰 Pakistan is growing fast in AI! We will be part of it."</span><br>
+        &nbsp;&nbsp;<span class="c-kw">else</span>:<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;<span class="c-kw">return</span> <span class="c-str">f"🤖 I need to learn more about '{message}'!"</span><br><br>
+        <span class="c-cm"># Test the chatbot with sample questions</span><br>
+        <span class="c-var">questions</span> <span class="c-op">=</span> [<span class="c-str">"What is Python?"</span>, <span class="c-str">"I want an AI job"</span>, <span class="c-str">"Tell me about Pakistan"</span>]<br><br>
+        <span class="c-kw">for</span> <span class="c-var">q</span> <span class="c-kw">in</span> <span class="c-var">questions</span>:<br>
+        &nbsp;&nbsp;<span class="c-fn">print</span>(<span class="c-str">f"👤 User: </span><span class="c-kw">{q}</span><span class="c-str">"</span>)<br>
+        &nbsp;&nbsp;<span class="c-fn">print</span>(<span class="c-fn">ai_response</span>(<span class="c-var">q</span>))<br>
+        &nbsp;&nbsp;<span class="c-fn">print</span>()
+      </div>
+      <div class="cb-output"><div class="out-label">▶ Output — Your First AI Chatbot!</div><div class="out-text">👤 User: What is Python?<br>🐍 Python is the best language for AI! Very high demand in Pakistan.<br><br>👤 User: I want an AI job<br>💼 AI jobs pay PKR 100k–500k+ per month. Keep learning!<br><br>👤 User: Tell me about Pakistan<br>🇵🇰 Pakistan is growing fast in AI! We will be part of it.</div></div>
+    </div>
+    <div class="tip-box">
+      <div class="tip-title">🎉 Congratulations! You Finished the Course!</div>
+      <div class="tip-text">You have learned the foundations of Python — variables, conditions, loops, and functions. You even built your own AI chatbot! Now you are ready to move on to Machine Learning and AI. Keep going with Pakistan AI Hub! 🇵🇰</div>
+    </div>
+    <div class="exercise">
+      <div class="ex-title">✏️ Final Project — Build Your Own Chatbot</div>
+      <div class="ex-task">Build your own AI chatbot that can answer at least 5 different topics — for example: cricket, food, weather, studies, or fun facts about Pakistan. Be creative!</div>
+      <div class="ex-hint">💭 Hint: Copy the ai_response() function and add your own if/elif conditions for each topic</div>
+    </div>`},
+];
+
+function renderPyLesson(idx){
+  const ll=document.getElementById('pylessonlist');
+  ll.innerHTML=pyLessons.map((l,i)=>`
+    <li class="py-lesson ${i===idx?'act':''}" onclick="renderPyLesson(${i})">
+      <span class="lesson-num">${String(i+1).padStart(2,'0')}</span>
+      <span>${l.title}</span>
+      ${i<idx?'<span class="lesson-done">✓</span>':''}
+    </li>`).join('');
+  const l=pyLessons[idx];
+  document.getElementById('pycontent').innerHTML=`
+    <div class="py-lesson-header">
+      <div class="lesson-title">${l.title}</div>
+      <div class="lesson-meta"><span>⏱ ${l.meta}</span></div>
+      <div class="progress-bar-wrap" style="margin-top:.8rem"><div class="progress-fill" style="width:${((idx+1)/pyLessons.length)*100}%"></div></div>
+    </div>
+    ${l.content}
+    <div class="nav-btns">
+      ${idx>0?`<button class="nav-btn nb-prev" onclick="renderPyLesson(${idx-1})">← Previous Lesson</button>`:''}
+      ${idx<pyLessons.length-1?`<button class="nav-btn nb-next" onclick="renderPyLesson(${idx+1})">Next Lesson →</button>`:'<button class="nav-btn nb-next" style="background:var(--green)">✅ Course Complete!</button>'}
+    </div>`;
+}
+renderPyLesson(0);
+
+const courseDetails={
+  ml:{title:"Machine Learning Basics",body:`<div class="py-theory"><h4>📖 What is Machine Learning?</h4><p>Machine Learning (ML) is a branch of AI where the computer <strong>learns from data by itself</strong> — you do not program it explicitly. Just like a child learns from experience, an ML model learns from data.</p><p>ML engineers in Pakistan earn PKR 150,000 to 500,000+ per month!</p></div><div class="tip-box"><div class="tip-title">💡 The 3 Main Types of ML</div><div class="tip-text"><strong>1. Supervised Learning:</strong> Learning from labeled data (like grading marks)<br><strong>2. Unsupervised Learning:</strong> Finding hidden patterns on its own (like grouping customers)<br><strong>3. Reinforcement Learning:</strong> Learning by trial and error (like a game AI)</div></div><div class="code-block"><div class="cb-header"><span class="cb-label">simple_ml.py — Your First ML Model</span><span class="cb-lang">Python</span></div><div class="cb-code"><span class="c-kw">from</span> <span class="c-fn">sklearn.linear_model</span> <span class="c-kw">import</span> <span class="c-fn">LinearRegression</span><br><span class="c-kw">import</span> <span class="c-fn">numpy</span> <span class="c-kw">as</span> <span class="c-fn">np</span><br><br><span class="c-cm"># Study hours vs exam marks dataset</span><br><span class="c-var">hours</span> <span class="c-op">=</span> np.array([[<span class="c-num">1</span>],[<span class="c-num">2</span>],[<span class="c-num">3</span>],[<span class="c-num">4</span>],[<span class="c-num">5</span>]])<br><span class="c-var">marks</span> <span class="c-op">=</span> np.array([<span class="c-num">40</span>,<span class="c-num">55</span>,<span class="c-num">65</span>,<span class="c-num">78</span>,<span class="c-num">90</span>])<br><br><span class="c-var">model</span> <span class="c-op">=</span> <span class="c-fn">LinearRegression</span>()<br><span class="c-var">model</span>.<span class="c-fn">fit</span>(<span class="c-var">hours</span>, <span class="c-var">marks</span>)<br><br><span class="c-cm"># Predict marks for 6 hours of study</span><br><span class="c-var">prediction</span> <span class="c-op">=</span> <span class="c-var">model</span>.<span class="c-fn">predict</span>([[<span class="c-num">6</span>]])<br><span class="c-fn">print</span>(<span class="c-str">f"Predicted marks for 6 hours: {prediction[0]:.1f}"</span>)</div><div class="cb-output"><div class="out-label">▶ Output:</div><div class="out-text">Predicted marks for 6 hours: 101.0</div></div></div>`},
+};
+
+function openCourse(id){
+  const d=courseDetails[id];
+  if(!d){
+    document.getElementById('modal-title').textContent='Coming Soon!';
+    document.getElementById('modal-body').innerHTML='<div class="py-theory"><h4>🚀 This Course is Coming Soon!</h4><p style="color:var(--muted);font-size:.9rem">This course will be available very soon. Stay tuned to Pakistan AI Hub and be the first to know!</p></div>';
+    document.getElementById('modal').classList.add('open');return;
+  }
+  document.getElementById('modal-title').textContent=d.title;
+  document.getElementById('modal-body').innerHTML=d.body;
+  document.getElementById('modal').classList.add('open');
+}
+function closeMod(){document.getElementById('modal').classList.remove('open')}
+document.getElementById('modal').addEventListener('click',function(e){if(e.target===this)closeMod()});
+
+const ti=['Python for AI','Machine Learning','Deep Learning','Free Courses','Pakistan AI Hub','Data Science','ChatGPT API','TensorFlow','NumPy & Pandas','Web Development','Freelancing','Interview Prep'];
+const tt=document.getElementById('ttk');
+const full=[...ti,...ti].map(t=>`<span class="tick-i"><span class="tick-sep">✦</span>${t}</span>`).join('');
+tt.innerHTML=full+full;
+renderCourses();
+</script>
+</body>
+</html>
